@@ -8,14 +8,14 @@ module.exports.login = async (req, res, next) => {
     let obj = await loginValidation(req.body);
     if (obj.err)
     {
-        res.status(400).json({ status : "error", msg : obj.err });
+        res.status(400).send({ status : "error", msg : obj.err });
         return next();
     }
 
 
     db.query("select * from user where name=?", [obj.username], (err, results, fields) => {
         if (err) console.log(err); // for debugging
-        if (results.length == 0) return res.status(422).json({ status : "error", msg : "username doesn't exists" });
+        if (results.length == 0) return res.status(422).send({ status : "error", msg : "username doesn't exists" });
 
         (async () => {
             const hash = results[0].hash;
@@ -40,14 +40,14 @@ module.exports.login = async (req, res, next) => {
                             console.log(err);
                             return next(err);
                         }
-                        res.status(200).json({ status : "success", msg : "logged" });
+                        res.status(200).send({ status : "success", msg : "logged" });
                         return next();
                     })
                 })
             }
             else
             {
-                return res.status(422).json({ status : "error", msg : "username and password combination is wrong" });
+                return res.status(422).send({ status : "error", msg : "username and password combination is wrong" });
             }
 
         })();
@@ -59,26 +59,27 @@ module.exports.register = async (req, res, next) => {
     let obj = await registerValidation(req.body);
     if (obj.err)
     {
-        res.status(400).json({ status : "error", msg : obj.err });
-        return next();
+        return res.status(400).send({ status : "error", msg : obj.err });
     }
+    else 
+    {
+        db.query("select * from user where name=? or email=?", [obj.username, obj.email], (err, results, fields) => {
+            if (err) console.log(err); // for debugging
+            if (results.length != 0) return res.status(422).send({ status : "error", msg : "username is already exists" });
 
+            (async() => {
+                const salt = await bcrypt.genSalt(10);
+                const hash = await bcrypt.hash(obj.password, salt);
 
-    db.query("select * from user where name=? or email=?", [obj.username, obj.email], (err, results, fields) => {
-        if (err) console.log(err); // for debugging
-        if (results.length != 0) return res.status(422).json({ status : "error", msg : "username is already exists" });
+                db.query("insert into user(name, hash, email) values (?, ?, ?)", [ obj.username, hash, obj.email ], (err, results, fields) => {
+                    if (err) console.log(err);
+                    res.status(200).send({ status : "success", msg : "successfully registered" });
+                    return next();
+                });
+            })();
+        })
 
-        (async() => {
-            const salt = await bcrypt.genSalt(10);
-            const hash = await bcrypt.hash(obj.password, salt);
-
-            db.query("insert into user(name, hash, email) values (?, ?, ?)", [ obj.username, hash, obj.email ], (err, results, fields) => {
-                if (err) console.log(err);
-                res.status(200).json({ status : "success", msg : "successfully registered" });
-                return next();
-            });
-        })();
-    })
+    }
 }
 
 
