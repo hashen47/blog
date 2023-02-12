@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Feb 12, 2023 at 05:00 AM
+-- Generation Time: Feb 12, 2023 at 03:08 PM
 -- Server version: 10.4.24-MariaDB
 -- PHP Version: 8.1.6
 
@@ -57,7 +57,8 @@ CREATE TABLE `post` (
   `title` varchar(255) NOT NULL,
   `content` varchar(600) NOT NULL,
   `cdate` date NOT NULL,
-  `uid` int(4) NOT NULL
+  `uid` int(4) NOT NULL,
+  `puid` int(6) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
 
 -- --------------------------------------------------------
