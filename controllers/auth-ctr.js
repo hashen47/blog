@@ -66,7 +66,6 @@ module.exports.register = async (req, res, next) => {
 
     db.query("select * from user where name=? or email=?", [obj.username, obj.email], (err, results, fields) => {
         if (err) console.log(err); // for debugging
-        console.log(results);
         if (results.length != 0) return res.status(422).json({ status : "error", msg : "username is already exists" });
 
         (async() => {
@@ -92,7 +91,7 @@ module.exports.logout = (req, res, next) => {
         }
 
         res.clearCookie("connect.sid", { path : "/" });
-        res.redirect("/");
+        res.redirect("/auth/login");
     })
 }
 
@@ -100,7 +99,7 @@ module.exports.logout = (req, res, next) => {
 module.exports.isAuthenticated = (req, res, next) => {
     if (!req.session.username && !req.session.uid)
     {
-        return res.redirect("/");
+        return res.redirect("/auth/login");
     }
 
     next();
