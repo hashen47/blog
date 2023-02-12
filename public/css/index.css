@@ -1,0 +1,23 @@
+.card{
+    width:550px;
+}
+
+
+.card > h4{
+    word-wrap:break-word;
+}
+
+
+#nav > ul:last-child{
+    position:absolute;
+    right:15px;
+}
+
+
+@media(max-width:767px) {
+    #nav > ul:last-child{
+        position:inherit;
+    }
+}
+
+
