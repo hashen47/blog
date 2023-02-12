@@ -41,8 +41,15 @@ app.use(express.json());
 
 
 // routes
-const auth = require("./routes/auth");
-app.use("/", auth);
+app.get("/", (req, res) => {
+    res.status(200).render("index", { title : "posts" , log : req.session.uid });
+})
+
+const auth = require("./routes/auth"); // auth route
+app.use("/auth", auth);
+
+const user = require("./routes/user"); // user route
+app.use("/user", user);
 
 
 // listening
