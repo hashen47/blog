@@ -1,0 +1,37 @@
+.register{
+    min-height:100vh;
+    background-image:url("/static/images/login-bg.jpg");
+    background-repeat:no-repeat;
+    background-size:cover;
+}
+
+
+.register > div:first-child{
+    max-width:600px;
+}
+
+
+label, a, span{
+    font-weight:650;
+    font-size:14px;
+}
+
+
+.right{
+    background-color:#ffffff59;
+    box-shadow:0px 0px 15px -3px black;
+}
+
+
+@media (max-width:992px){
+    h1 {
+        font-size: 36px;
+    }
+}
+
+
+@media (max-width:768px){
+    label, a, span{
+        font-size:12px;
+    }
+}

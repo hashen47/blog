@@ -1,0 +1,48 @@
+extends base.pug
+
+
+
+block append stylesheets
+    link(rel="stylesheet" href="/static/css/register.css")/
+
+
+block append scripts
+    script(type="text/javascript" src="/static/js/register.js")
+
+
+block body 
+    header
+        div(class="container-fluid")
+            .row
+                div(class="register col-12 d-flex justify-content-center align-items-center")
+                    div(class="col-11 col-sm-10 col-lg-9 p-4 right rounded-2 d-flex flex-column")
+                        div(class="form-group mb-3 mb-md-4")
+                            h1 Register
+
+                        div(class="row row-cols-1")
+                            div(class="form-group mb-2 mb-md-3")
+                                label(class="mb-1" for="username" class="label") USERNAME
+                                input(class="form-control p-2 p-sm-3" type="text" id="username" placeholder="Username")/
+
+                            div(class="form-group mb-2 mb-md-3")
+                                label(class="mb-1" for="email" class="label") EMAIL
+                                input(class="form-control p-2 p-sm-3" type="email" id="email" placeholder="Email")/
+
+                            div(class="form-group mb-2 mb-md-3")
+                                label(class="mb-1" for="password" class="label") PASSWORD
+                                input(class="form-control p-2 p-sm-3" type="text" id="password" placeholder="Password")/
+
+                            div(class="form-group mb-2 mb-md-3")
+                                label(class="mb-1" for="re-password" class="label") RE-PASSWORD 
+                                input(class="form-control p-2 p-sm-3" type="password" id="re-password" placeholder="Re-Password")/
+
+                        div(class="form-group mt-3 mt-md-4")
+                            button(class="btn btn-primary p-2 p-md-3 w-100") Register
+
+                        div(class="form-group mt-3 mt-md-4 text-center")
+                            span Already have an account?
+                            a(href="/login") Login 
+
+
+
+
