@@ -11,7 +11,7 @@ window.addEventListener("load", () => {
         (async () => {
             try 
             {
-                const response = await fetch("/", {
+                const response = await fetch("/auth/login", {
                     method : "POST",
                     headers : {
                         "Content-Type" : "application/json"
@@ -30,7 +30,7 @@ window.addEventListener("load", () => {
                 if (resp.status == "success")
                 {
                     console.log("here");
-                    window.open("/posts", "_self"); // if user is successfully login user redirect to the index page
+                    window.open("/", "_self"); // if user is successfully login user redirect to the index page
                 }
             }
             catch(err)
