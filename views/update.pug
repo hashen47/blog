@@ -1,0 +1,29 @@
+extends base.pug
+include  includes/mixins.pug
+
+
+
+block append scripts 
+    script(type="text/javascript" src="/static/js/update.js")
+
+
+block body
+    include includes/navbar.pug
+
+    div(class="container-fluid")
+        .row
+            div(class="col d-flex align-items-center justify-content-center mt-2")
+                div(class="col-11 col-sm-10 mt-3")
+                    div(class="col d-flex mt-5 justify-content-center")
+                        h1 Create a Post
+
+                    div(class="form-group mt-2")
+                        h4 Title
+                        input(class="form-control" maxlength="254" type="text" id="title" value= (post) ? post.title : "")/
+
+                    div(class="form-group mt-2")
+                        h4 Content
+                        textarea(class="form-control" type="text" id="content" rows="8" maxlength="599") #{ (post) ? post.content : "" }
+
+                    div(class="form-group mt-4")
+                        button(puid= (puid) ? puid : "" class="btn btn-success p-3 form-control" id="update") Update
