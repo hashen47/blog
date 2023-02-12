@@ -1,6 +1,7 @@
 const Joi = require("joi");
 
 
+// authentication validations
 // user input validation 
 module.exports.loginValidation = async (obj) => {
     const login_schema = Joi.object({
@@ -9,13 +10,11 @@ module.exports.loginValidation = async (obj) => {
             .required()
 
         , password : Joi.string()
-            .alphanum() 
             .required()
 
         , remember : Joi.boolean().required()
     })
     .with('username', 'password');
-
 
     try  // validate
     {
@@ -24,7 +23,7 @@ module.exports.loginValidation = async (obj) => {
     }
     catch(err)
     {
-        return { err : err };
+        return { err : err.details[0].message };
     }
 }
 
@@ -41,7 +40,6 @@ module.exports.registerValidation = async (obj) => {
             .required()
 
         , password : Joi.string()
-            .alphanum() 
             .min(8)
             .required()
 
@@ -57,6 +55,83 @@ module.exports.registerValidation = async (obj) => {
     }
     catch(err)
     {
-        return { err : err };
+        return { err : err.details[0].message };
     }
 }
+
+
+// blog post create validation
+module.exports.createValidation = async (obj) => {
+    const create_schema = Joi.object({  
+        title : Joi.string()
+            .required()
+            .min(10)
+            .max(254)
+        
+        , content : Joi.string()
+            .required()
+            .min(10)
+            .max(599)
+    })
+    .with('title', 'content');
+
+    try
+    {
+        const output = await create_schema.validateAsync(obj);
+        return output;
+    }
+    catch(err)
+    {
+        return { err : err.details[0].message };
+    }
+}
+
+
+// blog post delete validation
+module.exports.delValidation = async (obj) => {
+    const del_schema = Joi.object({  
+        id : Joi.number().required()
+    })
+
+    try
+    {
+        const output = await del_schema.validateAsync(obj);
+        return output;
+    }
+    catch(err)
+    {
+        return { err : err.details[0].message };
+    }
+}
+
+
+module.exports.updateValidation = async(obj) => {
+    const update_schema = Joi.object({  
+        title : Joi.string()
+            .required()
+            .min(10)
+            .max(254)
+        
+        , content : Joi.string()
+            .required()
+            .min(10)
+            .max(599)
+
+        , puid : Joi.number()
+            .required()
+    })
+    .with('title', 'content');
+
+    try
+    {
+        const output = await update_schema.validateAsync(obj);
+        return output;
+    }
+    catch(err)
+    {
+        return { err : err.details[0].message };
+    }
+}
+
+
+
