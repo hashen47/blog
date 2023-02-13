@@ -90,7 +90,7 @@ module.exports.createValidation = async (obj) => {
 // blog post delete validation
 module.exports.delValidation = async (obj) => {
     const del_schema = Joi.object({  
-        id : Joi.number().required()
+        pid : Joi.number().required()
     })
 
     try
@@ -125,6 +125,24 @@ module.exports.updateValidation = async(obj) => {
     try
     {
         const output = await update_schema.validateAsync(obj);
+        return output;
+    }
+    catch(err)
+    {
+        return { err : err.details[0].message };
+    }
+}
+
+
+module.exports.commentValidation = async(obj) => {
+    const schema = Joi.object({
+        pid : Joi.number().required(),
+        comment : Joi.string().required()
+    })
+
+    try
+    {
+        const output = await schema.validateAsync(obj);
         return output;
     }
     catch(err)
