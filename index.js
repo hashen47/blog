@@ -41,8 +41,9 @@ app.use(express.json());
 
 
 // routes
-app.get("/", (req, res) => {
-    res.status(200).render("index", { title : "posts" , log : req.session.uid });
+const { allPosts } = require("./controllers/user-ctr");
+app.get("/", allPosts, (req, res) => {
+    res.status(200).render("index", { title : "posts" , log : req.session.uid ,posts : req.posts });
 })
 
 const auth = require("./routes/auth"); // auth route
