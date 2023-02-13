@@ -1,17 +1,17 @@
 mixin post(post)
     //- this is the full card(post)
-    div(class="card mt-5")
+    div(class="card mt-5 w-100" style="max-width:600px")
         div(class="card-header d-flex align-items-center justify-content-between")
             div(class="col-4 d-flex align-items-center justify-content-start")
                 //- the author of the post
                 a(href=`/user/${post.name}/posts` style="color:black;")
                     h5= post.name 
 
-                    //- log means uid of the current user
+            //- log means uid of the current user
             if post.uid == post.userid && post.uid == log 
                 div(class="col-8 d-flex justify-content-end")
-                    button(class="btn btn-success me-1") Update
-                    button(class="btn btn-danger") Delete
+                    a(href=`/user/posts/${post.puid}/update` class="btn btn-success me-1") Update
+                    button(pid= post.pid class="btn btn-danger delete") Delete
 
         div(class="card-body")
             //- card title here
@@ -20,17 +20,17 @@ mixin post(post)
             //- card content here
             p(class="card-text")= post.content 
 
-            a(class="card-title card-link mb-1" data-bs-toggle="collapse" href="#coll" + post.pid roll="button" aria-expanded="false" aria-controls= post.pid)= (post.comments) ? `${post.comments.length} comments` : `no comments`
+            a(class="card-title card-link mb-1" data-bs-toggle="collapse" href="#coll" + post.pid roll="button" aria-expanded="false" aria-controls= post.pid)= (post.comments.length > 0) ? `${post.comments.length} comments` : `no comments`
             div(class="collapse mt-1" id="coll" + post.pid)
                 div(class="card card-body" style="width: auto;")
-                //- comment loads here
-                if comments
-                    each comment in post.comments 
-                        span(class="text-muted")= comment.text 
+                    //- comment loads here
+                    if post.comments
+                        each comment in post.comments 
+                            span(class="text-muted")= comment.text 
 
             div(pid= post.pid class="form-group align-items-end d-flex flex-sm-row flex-column mt-2 mb-3")
                 input(type="text" class="form-control")/
-                button(type="button" id="comment-btn" class="btn btn-primary") Comment
+                button(type="button" id="comment-btn" class="btn btn-primary comment") Comment
             
         div(class="card-footer d-flex")
             div(class="col-4 d-flex align-items-center justify-content-start")= new Date(post.cdate).toDateString()
