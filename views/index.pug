@@ -2,5 +2,18 @@ extends base.pug
 include includes/mixins.pug
 
 
+
+block append scripts
+    script(defer type="text/javascript" src="/static/js/index.js")
+
+
 block body
     include includes/navbar.pug
+    
+    div(class="container-fluid")
+        div(class="row")
+            div(class="col-12 d-flex justify-content-center")
+                div(class="col-10 col-md-10 d-flex flex-column align-items-center justiyf-content-center mb-5")
+                    if posts
+                    each post in posts 
+                        +post(post)
