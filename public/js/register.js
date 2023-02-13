@@ -26,7 +26,7 @@ window.addEventListener("load", () => {
                 const resp = await response.json();
 
                 console.log(resp);
-                alert(resp);
+                alert(resp.msg);
                 if (resp.status == "success") window.location.reload();
 
             })();
