@@ -242,7 +242,7 @@ module.exports.anyOnePosts = (req, res, next) => {
 
 
 module.exports.comment = async(req, res, next) => {
-    if (!req.session.uid) res.status(422).send({ status : "error", msg : "Can't comment without login first" });
+    if (!req.session.uid) return res.status(422).send({ status : "error", msg : "Can't comment without login first" });
 
     const obj = await commentValidation(req.body);
     if (obj.err)
@@ -265,3 +265,94 @@ module.exports.comment = async(req, res, next) => {
     }
 }
 
+
+// like to a post
+module.exports.like = async (req, res, next) => {
+    if (!req.session.uid) return res.status(422).send({ status : "error", msg : "Can't like without login" });
+
+    const obj = await delValidation(req.body);
+    if (obj.err)
+    {
+        return res.status(422).send({ status : "error", msg : obj.err });
+    }
+    else 
+    {
+        db.query("select * from plike where pid=? and uid=?", [obj.pid, req.session.uid], (err, results, fields) => {
+            if (results.length == 0)
+            {
+                db.query("insert into plike(pid, uid) values (?, ?)", [obj.pid, req.session.uid], (err, results, fields) => {
+                    if (err)
+                    {
+                        console.log(err);
+                        return;
+                    }
+                    else 
+                    {
+                        return res.status(200).send({ status : "success", msg : "successfully added the like" });
+                    }
+                })
+            }
+            else 
+            {
+                return res.status(400).send({ status : "error", msg : "Can't like to a same post twice" });
+            }
+        })
+    }
+}
+
+
+// dislike to a post
+module.exports.dislike = async (req, res, next) => {
+    if (!req.session.uid) return res.status(422).send({ status : "error", msg : "Can't dislike without login" });
+
+    const obj = await delValidation(req.body);
+    if (obj.err)
+    {
+        return res.status(422).send({ status : "error", msg : obj.err });
+    }
+    else 
+    {
+        db.query("select * from plike where pid=? and uid=?", [obj.pid, req.session.uid], (err, results, fields) => {
+            if (results.length > 0)
+            {
+                db.query("delete from plike where pid=? and uid=?", [obj.pid, req.session.uid], (err, results, fields) => {
+                    if (err)
+                    {
+                        console.log(err);
+                        return;
+                    }
+                    else 
+                    {
+                        return res.status(200).send({ status : "success", msg : "successfully added the like" });
+                    }
+                })
+            }
+            else 
+            {
+                return res.status(400).send({ status : "error", msg : "Bad Request" });
+            }
+        })
+    }
+}
+
+
+// check if current user is liked to the post or not
+module.exports.isLiked = (req, res, next) => {
+    if (!req.session.uid) return res.status(200).send({pids : []});
+
+    db.query("select * from plike", (err, results, fields) => {
+        const pids = []; 
+        if (err)
+        {
+            console.log(err);
+            return;
+        }
+
+        for(let like of results)
+        {
+            if (like.uid == req.session.uid) pids.push(String(like.pid));
+        }
+
+        return res.status(200).send({ pids : pids });
+    })
+}
