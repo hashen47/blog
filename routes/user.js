@@ -1,6 +1,6 @@
 const { Router } = require("express");
 const { isAuthenticated } = require("../controllers/auth-ctr");
-const { create, del, update, loadPostUpdate, myPosts, anyOnePosts, comment } = require("../controllers/user-ctr");
+const { create, del, update, loadPostUpdate, myPosts, anyOnePosts, comment, like, dislike, isLiked } = require("../controllers/user-ctr");
 const router = Router();
 
 
@@ -28,6 +28,12 @@ router.route("/update").post(isAuthenticated, update);
 router.route("/delete").post(isAuthenticated, del);
 
 router.route("/comment").post(comment);
+
+router.route("/like").post(like);
+
+router.route("/dislike").post(dislike);
+
+router.route("/isliked").get(isLiked);
 
 
 
